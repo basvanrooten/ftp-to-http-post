@@ -84,6 +84,9 @@ def monitor_ftp():
                 
                 # Get list of files
                 files = ftp.nlst()
+
+                if not files:
+                    logging.info("No files found on FTP server")
                 
                 for file in files:
                     process_file(ftp, file)
