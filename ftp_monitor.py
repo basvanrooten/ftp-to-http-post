@@ -42,13 +42,16 @@ def process_file(ftp, filename):
     } if HTTP_AUTH_TOKEN else {}
     
     # Prepare multipart form data
-    fields = {'document': (filename, file_content, 'application/octet-stream')}
+    fields = []
     
+    # Add the document
+    fields.append(('document', (filename, file_content, 'application/octet-stream')))
+
     # Add tags to the fields, with multiple 'tags' entries for multiple tags
     for tag in TAGS:
         if tag.strip():  # Only add non-empty tags
-            fields[f'tags'] = (None, tag.strip())
-    
+            fields.append(('tags', tag.strip()))
+
     multipart_data = MultipartEncoder(fields=fields)
     
     # Update headers with content type
