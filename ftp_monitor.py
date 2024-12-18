@@ -95,7 +95,31 @@ def monitor_ftp():
         logging.info(f"Sleeping for {SLEEP_DURATION} seconds before next check")
         time.sleep(SLEEP_DURATION)
 
+def check_required_env_vars():
+    # Determine if required environment variables are set, log per missing variable and exit if any are missing
+    missing_vars = False
+
+    if not FTP_HOST:
+        logging.error("FTP_HOST environment variable is not set")
+        missing_vars = True
+    if not FTP_USER:
+        logging.error("FTP_USER environment variable is not set")
+        missing_vars = True
+    if not FTP_PASS:
+        logging.error("FTP_PASS environment variable is not set")
+        missing_vars = True
+    if not HTTP_ENDPOINT:
+        logging.error("HTTP_ENDPOINT environment variable is not set")
+        missing_vars = True
+
+    if missing_vars:
+        logging.error("One or more required environment variables are missing. Exiting script.")
+        exit(1)
+
 if __name__ == "__main__":
+    # Check required environment variables
+    check_required_env_vars()
+
     logging.info(f"Starting FTP monitor. Sleep duration between checks: {SLEEP_DURATION} seconds")
     logging.info(f"Tags to be added to documents: {TAGS}")
     monitor_ftp()
